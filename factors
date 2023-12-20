@@ -2,19 +2,38 @@
 
 import sys
 import math
+import time
 
 def factorize(n):
-    for i in range(2, int(math.sqrt(n)) + 1):
+    factors = []
+    
+    # Check for perfect squares
+    sqrt_n = int(math.sqrt(n))
+    if sqrt_n * sqrt_n == n:
+        return [sqrt_n, sqrt_n]
+
+    for i in range(2, sqrt_n + 1):
         if n % i == 0:
-            return i, n // i
-    return n, 1
+            factors.append(i)
+            factors.append(n // i)
+            return factors
+    return [n, 1]
 
 def main(file_path):
+    start_time = time.time()  # Record the start time
     with open(file_path, 'r') as file:
         for line in file:
             number = int(line.strip())
-            factor1, factor2 = factorize(number)
-            print(f"{number}={max(factor1, factor2)}*{min(factor1, factor2)}")
+            factors = factorize(number)
+            print(f"{number}={min(factors)}*{max(factors)}")
+
+    end_time = time.time()  # Record the end time
+    elapsed_time = end_time - start_time
+
+    # Print the timing information
+    print("\nreal\t{:.3f}s".format(elapsed_time))
+    print("user\t{:.3f}s".format(elapsed_time))
+    print("sys\t{:.3f}s".format(0.0))  # sys time is usually negligible for simple scripts
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
