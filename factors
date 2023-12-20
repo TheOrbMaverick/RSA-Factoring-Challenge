@@ -1,21 +1,20 @@
 #!/usr/bin/python3
+
 import sys
 import math
 
 def factorize(n):
     for i in range(2, int(math.sqrt(n)) + 1):
-            if n % i == 0:
-                return i, n
+        if n % i == 0:
+            return i, n // i
     return n, 1
-
 
 def main(file_path):
     with open(file_path, 'r') as file:
         for line in file:
             number = int(line.strip())
             factor1, factor2 = factorize(number)
-            print(f"{number}={min(factor1, factor2)}*{max(factor1, factor2)}")
-
+            print(f"{number}={max(factor1, factor2)}*{min(factor1, factor2)}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
