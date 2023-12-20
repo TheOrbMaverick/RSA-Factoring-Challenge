@@ -1,17 +1,42 @@
 #!/usr/bin/python3
 
 import sys
-from sympy import factorint
+import random
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+def pollards_rho(n):
+    x = random.randint(1, n - 1)
+    y = x
+    d = 1
+
+    f = lambda x: (x**2 + 1) % n
+
+    while d == 1:
+        x = f(x)
+        y = f(f(y))
+        d = gcd(abs(x - y), n)
+
+    if d == n:
+        # If the algorithm fails, return n
+        return [n]
+    else:
+        # Otherwise, return the two factors
+        return [d, n // d]
 
 def factorize(n):
-    return factorint(n)
+    factors = pollards_rho(n)
+    return factors
 
 def main(file_path):
     with open(file_path, 'r') as file:
         for line in file:
             number = int(line.strip())
             factors = factorize(number)
-            print(f"{number}={'*'.join([f'{key}**{value}' for key, value in factors.items()])}")
+            print(f"{number}={'*'.join(map(str, factors))}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
